@@ -75,7 +75,10 @@ const Nav = () => {
       {/* Mobile Navigation */}
       <div className='sm:hidden flex relative'>
         {session?.user ? (
-          <div className='flex'>
+          <div className='flex gap-3'>
+            <Link href='/create-prompt' className='black_btn'>
+              Create Post
+            </Link>
             <Image
               src={session?.user.image}
               width={37}
@@ -94,13 +97,13 @@ const Nav = () => {
                 >
                   My Profile
                 </Link>
-                <Link
+                {/* <Link
                   href='/create-prompt'
                   className='dropdown_link'
                   onClick={() => setToggleDropdown(false)}
                 >
                   Create Prompt
-                </Link>
+                </Link> */}
                 <button
                   type='button'
                   onClick={() => {

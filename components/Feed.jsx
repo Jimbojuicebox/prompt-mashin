@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Loading from '@components/loading'
 
 import PromptCard from "./PromptCard";
 
@@ -20,6 +21,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [allPosts, setAllPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Search states
   const [searchText, setSearchText] = useState("");
@@ -27,10 +29,12 @@ const Feed = () => {
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchPosts = async () => {
+    setIsLoading(true);
     const response = await fetch("/api/prompt");
     const data = await response.json();
 
     setAllPosts(data);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -72,7 +76,7 @@ const Feed = () => {
       <form className='relative w-full flex-center'>
         <input
           type='text'
-          placeholder='Search for tag, phrase or a username'
+          placeholder='Search for tag, phrase or username'
           value={searchText}
           onChange={handleSearchChange}
           required
@@ -80,14 +84,21 @@ const Feed = () => {
         />
       </form>
     
-      {/* All Prompts */}
-      {searchText ? (
-        <PromptCardList
-          data={searchedResults}
-          handleTagClick={handleTagClick}
-        />
+      {/* render the loading animation when isLoading is true */}
+      {isLoading ? (
+        <Loading />
       ) : (
-        <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
+        <>
+          {/* All Prompts */}
+          {searchText ? (
+            <PromptCardList
+              data={searchedResults}
+              handleTagClick={handleTagClick}
+            />
+          ) : (
+            <PromptCardList data={allPosts} handleTagClick={handleTagClick} />
+          )}
+        </>
       )}
     </section>
   );
